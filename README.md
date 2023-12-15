@@ -21,11 +21,12 @@ The DNS Security Analysis Tool is a Python-based utility designed to conduct an 
 2. Navigate to the cloned directory:
 `cd dns-security-analysis-tool`
 3. Install the required Python package:
-`pip install dnspython pandas`
+`pip install dnspython`
+`pip install pandas`
 
 ## Usage
 Run the script from the command line by specifying the input file containing domain names and other optional parameters:
-python3 dns_security_analysis_tool.py --domains-file domains.txt --format csv --output dns_security_report
+`python3 dns_security_analysis_tool.py --domains-file domains.txt --format csv --output dns_security_report`
 
 ### Command-Line Arguments
 - `--domains-file`: Path to the file containing the list of domains for analysis.
@@ -34,10 +35,10 @@ python3 dns_security_analysis_tool.py --domains-file domains.txt --format csv --
 - `--output`: (Optional) Name of the output file (without extension).
 
 ## Contributing
-Contributions to this project are welcome. Feel free to fork the repository, make your changes, and submit a pull request.
+I want you to know that contributions to this project are welcome. Please feel free to fork the repository, make your changes, and submit a pull request.
 
 ## License
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the Apache License 2.0. Please take a look at the [LICENSE](LICENSE) file for more details.
 
 ## Contact
 For any questions or feedback, please contact [Shamim](mailto:shamimreza@sohag.shamim@gmail.com).
