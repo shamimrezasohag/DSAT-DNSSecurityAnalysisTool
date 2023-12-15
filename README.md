@@ -34,13 +34,24 @@ Run the script from the command line by specifying the input file containing dom
 - `--format`: (Optional) output report format (`json`, `csv`, `html`).
 - `--output`: (Optional) Name of the output file (without extension).
 
-## Contributing
+## Bug Reporting and Contributions
+
+### Reporting Bugs
+If you encounter any bugs or issues with the DNS Security Analysis Tool, please report them to us for investigation. You can submit bug reports via our GitHub Issues page:
+
+[Submit a Bug Report](https://github.com/shamimrezasohag/dns-security-analysis-tool/issues)
+
+When reporting a bug, please provide as much detail as possible, such as the steps to reproduce the issue, the expected outcome, and any relevant logs or screenshots.
+
+### Contributing
 I want you to know that contributions to this project are welcome. Please feel free to fork the repository, make your changes, and submit a pull request.
+
+For more details on how to contribute, please read our [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 ## License
 This project is licensed under the Apache License 2.0. Please take a look at the [LICENSE](LICENSE) file for more details.
 
 ## Contact
-For any questions or feedback, please contact [Shamim](mailto:shamimreza@sohag.shamim@gmail.com).
+For any questions or feedback, please contact [Shamim](mailto:sohag.shamim@gmail.com).
 
 
