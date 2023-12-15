@@ -48,6 +48,13 @@ I want you to know that contributions to this project are welcome. Please feel f
 
 For more details on how to contribute, please read our [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
+## Reporting Security Vulnerabilities
+
+We take the security of our project seriously. If you find any security vulnerabilities in our tool, please make sure to report them responsibly. To report a security vulnerability, please follow the steps outlined in our [Security Policy](https://github.com/shamimrezasohag/dns-security-analysis-tool/SECURITY.md).
+
+Your report should include details of the vulnerability, how it can be exploited, and any potential impact. Please do not disclose the vulnerability publicly until we have had a chance to resolve it.
+
+
 ## License
 This project is licensed under the Apache License 2.0. Please take a look at the [LICENSE](LICENSE) file for more details.
 
