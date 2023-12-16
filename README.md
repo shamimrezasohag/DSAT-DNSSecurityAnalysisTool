@@ -23,6 +23,7 @@ The DNS Security Analysis Tool is a Python-based utility designed to conduct an 
 3. Install the required Python package:
 ```pip install dnspython```
 ```pip install pandas```
+`pip install tqdm`
 
 ## Usage
 Run the script from the command line by specifying the input file containing domain names and other optional parameters:
