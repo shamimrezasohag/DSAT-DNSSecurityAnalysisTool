@@ -13,7 +13,7 @@ The DNS Security Analysis Tool is a Python-based utility designed to conduct an 
 
 ## Prerequisites
 - Python 3.x
-- `dnspython` library
+- `dnspython` `pnadas` `tqdm` library
 
 ## Installation
 1. Clone the repository:
