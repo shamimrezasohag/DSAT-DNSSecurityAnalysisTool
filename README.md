@@ -54,6 +54,8 @@ We take the security of our project seriously. If you find any security vulnerab
 
 Your report should include details of the vulnerability, how it can be exploited, and any potential impact. Please do not disclose the vulnerability publicly until we have had a chance to resolve it.
 
+## Features added
+- **Progress Bar**: Real-time visual feedback on script execution with a progress bar.
 
 ## License
 This project is licensed under the Apache License 2.0. Please take a look at the [LICENSE](LICENSE) file for more details.
