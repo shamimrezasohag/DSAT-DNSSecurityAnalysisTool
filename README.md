@@ -40,7 +40,7 @@ Run the script from the command line by specifying the input file containing dom
 ### Reporting Bugs
 If you encounter any bugs or issues with the DNS Security Analysis Tool, please report them to us for investigation. You can submit bug reports via our GitHub Issues page:
 
-[Submit a Bug Report](https://github.com/shamimrezasohag/dns-security-analysis-tool/issues)
+[Submit a Bug Report](https://github.com/shamimrezasohag/DSAT-DNSSecurityAnalysisTool/blob/main/.github/ISSUE_TEMPLATE/bug_report.md)
 
 When reporting a bug, please provide as much detail as possible, such as the steps to reproduce the issue, the expected outcome, and any relevant logs or screenshots.
 
