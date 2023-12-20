@@ -72,7 +72,7 @@ class DNSQueryTool:
                     continue
 
                 try:
-                    name = dns.name.from_text(f'{domain}.')
+                    name = dns.name.from_text(domain)
                     dns.dnssec.validate(answer[0],answer[1],{name:answer[0]})
                     return "DNSSEC Verified"
                 except Exception as e:
