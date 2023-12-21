@@ -1,5 +1,9 @@
 import dns.resolver
 import dns.reversename
+import dns.query
+import dns.message
+import dns.rdatatype
+import dns.dnssec
 import argparse
 import logging
 import pandas as pd
@@ -21,7 +25,7 @@ class DNSQueryTool:
             results[record_type], results[f'{record_type}_response_code'] = self.query_record(domain, record_type)
         results['PTR'], _ = self.check_reverse_dns(results.get('A', '') + results.get('AAAA', ''))
         results['Open Resolver'] = self.check_open_resolver(domain)
-        results['DNSSEC'] = self.check_dnssec(domain)
+        results['DNSSEC'] = self.check_dnssec(domain, results.get('NS', ''))
         results['Anomalies'] = self.analyze_records(results)
         return results
 
@@ -50,12 +54,31 @@ class DNSQueryTool:
         except Exception:
             return "Not an Open Resolver"
 
-    def check_dnssec(self, domain):
-        try:
-            self.resolver.resolve(domain, 'A', want_dnssec=True)
-            return "DNSSEC Verified"
-        except Exception as e:
-            return f"DNSSEC Not Verified: {e}"
+    def check_dnssec(self, domain, nameservers):
+        if nameservers:
+            request = dns.message.make_query(domain, dns.rdatatype.DNSKEY, want_dnssec=True)
+            nameservers = nameservers.split("; ")
+            for nameserver in nameservers:
+                try:
+                    nsresponse = self.resolver.resolve(nameserver,dns.rdatatype.A)
+                    nsaddr = nsresponse.rrset[0].to_text()
+                    response = dns.query.tcp(request, nsaddr) # udp returns truncated answers
+                    if response.rcode() != 0:
+                        continue
+                    answer = response.answer
+                    if len(answer) != 2:
+                        continue
+                except Exception:
+                    continue
+
+                try:
+                    name = dns.name.from_text(domain)
+                    dns.dnssec.validate(answer[0],answer[1],{name:answer[0]})
+                    return "DNSSEC Verified"
+                except Exception as e:
+                    return f"DNSSEC Not Verified: {e}"
+
+        return "DNSSEC Not Verified: missing DNSKEY"
 
     def analyze_records(self, records):
         anomalies = {}
