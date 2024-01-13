@@ -11,16 +11,18 @@ import subprocess
 import requests
 from tqdm import tqdm
 
-# Setup logging
+# # Setup logging for recording the process and errors
 logging.basicConfig(filename='dns_security_audit.log', level=logging.INFO,
                     format='%(asctime)s:%(levelname)s:%(message)s')
 
 class DNSQueryTool:
     def __init__(self, dns_server):
+        # Initialize the resolver with the specified DNS server
         self.resolver = dns.resolver.Resolver()
         self.resolver.nameservers = [dns_server]
 
     def query_all_records(self, domain):
+        # Query multiple DNS record types for a given domain
         record_types = ['A', 'AAAA', 'MX', 'TXT', 'NS', 'CNAME', 'SOA', 'SPF', 'DKIM', 'DNSKEY', 'DS']
         results = {'domain': domain}
         for record_type in record_types:
@@ -32,6 +34,7 @@ class DNSQueryTool:
         return results
 
     def query_record(self, domain, record_type):
+        # Perform a DNS query for a specific record type
         try:
             answers = self.resolver.resolve(domain, record_type)
             return "; ".join([answer.to_text() for answer in answers]), "NOERROR"
@@ -39,6 +42,7 @@ class DNSQueryTool:
             return "", str(e)
 
     def check_reverse_dns(self, ip_addresses):
+        # Perform reverse DNS lookups for given IP addresses/got from the A record
         ptr_records = []
         for ip in ip_addresses.split("; "):
             try:
@@ -49,7 +53,7 @@ class DNSQueryTool:
                 ptr_records.append(str(e))
         return "; ".join(ptr_records), "NOERROR"
     
-    #revised the logic to check the open_dns_resolver
+    # Revised the logic to check the open_dns_resolver, Check if a DNS server is an open resolver using the 'dig' command
     def check_open_resolver(self, domain):
         try:
             result = subprocess.run(
@@ -62,6 +66,7 @@ class DNSQueryTool:
             return "Check Failed"
 
     def check_dnssec(self, domain, nameservers):
+        # Validate the DNSSEC records for a given domain
         if nameservers:
             request = dns.message.make_query(domain, dns.rdatatype.DNSKEY, want_dnssec=True)
             nameservers = nameservers.split("; ")
@@ -79,6 +84,7 @@ class DNSQueryTool:
                     continue
 
                 try:
+                    # Validate DNSSEC signatures
                     name = dns.name.from_text(domain)
                     dns.dnssec.validate(answer[0],answer[1],{name:answer[0]})
                     return "DNSSEC Verified"
@@ -98,6 +104,7 @@ class DNSQueryTool:
         return "; ".join([f"{k}: {v}" for k, v in anomalies.items()])
 
 def generate_report(all_data, output_format, output_filename):
+    # Generate a report in the specified format (CSV, HTML, JSON)
     df = pd.DataFrame(all_data)
     if output_format == 'csv':
         df.to_csv(output_filename, index=False)
@@ -107,6 +114,7 @@ def generate_report(all_data, output_format, output_filename):
         df.to_json(output_filename, orient='records', indent=4)
 
 def process_domains(domains, dns_server, output_format, output_filename):
+    # Process a list of domains for DNS security analysis
     tool = DNSQueryTool(dns_server)
     all_results = []
 
