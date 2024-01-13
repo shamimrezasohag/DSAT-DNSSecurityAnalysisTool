@@ -45,13 +45,13 @@ If you encounter any bugs or issues with the DNS Security Analysis Tool, please 
 When reporting a bug, please provide as much detail as possible, such as the steps to reproduce the issue, the expected outcome, and any relevant logs or screenshots.
 
 ### Contributing
-I want you to know that contributions to this project are welcome. Please feel free to fork the repository, make your changes, and submit a pull request.
+I want you to know that contributions to this project are welcome. Please feel free to fork the repository, make changes, and submit a pull request.
 
 For more details on how to contribute, please read our [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 ## Reporting Security Vulnerabilities
 
-We take the security of our project seriously. If you find any security vulnerabilities in our tool, please make sure to report them responsibly. To report a security vulnerability, please follow the steps outlined in our [Security Policy](https://github.com/shamimrezasohag/dns-security-analysis-tool/SECURITY.md).
+We take the security of our project seriously. If you find any security vulnerabilities in our tool, please report them responsibly. To report a security vulnerability, please follow the steps outlined in our [Security Policy](https://github.com/shamimrezasohag/dns-security-analysis-tool/SECURITY.md).
 
 Your report should include details of the vulnerability, how it can be exploited, and any potential impact. Please do not disclose the vulnerability publicly until we have had a chance to resolve it.
 
@@ -59,9 +59,17 @@ Your report should include details of the vulnerability, how it can be exploited
 - **Progress Bar**: Real-time visual feedback on script execution with a progress bar.
 
 ## License
-This project is licensed under the Apache License 2.0. Please take a look at the [LICENSE](LICENSE) file for more details.
+This project is licensed under the Apache License 2.0. Please look at the [LICENSE](LICENSE) file for more details.
+
+### Key Notes:
+- **`check_open_resolver` Function**: This function uses the `dig` command to determine if the given domain is an open resolver. Ensure the environment where this script is run has the `dig` command available.
+- **`check_dnssec` Function**: Performs DNSSEC validation for the domain using the specified nameservers.
+- **`analyze_records` Function**: Placeholder for analyzing DNS records for anomalies. Specific logic can be implemented based on the requirements.
+- **Reporting and Processing**: The script generates a report in the chosen format and processes each domain in the input file, showing progress with a `tqdm` progress bar.
+
+This script should now provide comprehensive DNS security analysis, including open resolver checking and DNSSEC validation, among other features. Test this script in your environment to ensure it performs as expected. Please let me know if you encounter any issues or need further modifications!
 
 ## Contact
-For any questions or feedback, please contact [Shamim](mailto:sohag.shamim@gmail.com).
+Please contact [Shamim](mailto:sohag.shamim@gmail.com) for any questions or feedback.
 
 
