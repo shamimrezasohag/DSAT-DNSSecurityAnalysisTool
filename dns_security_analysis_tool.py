@@ -7,6 +7,8 @@ import dns.dnssec
 import argparse
 import logging
 import pandas as pd
+import subprocess
+import requests
 from tqdm import tqdm
 
 # Setup logging
@@ -46,13 +48,18 @@ class DNSQueryTool:
             except Exception as e:
                 ptr_records.append(str(e))
         return "; ".join(ptr_records), "NOERROR"
-
+    
+    #revised the logic to check the open_dns_resolver
     def check_open_resolver(self, domain):
         try:
-            self.resolver.resolve('example.com', 'A')
-            return "Potentially Open Resolver"
-        except Exception:
-            return "Not an Open Resolver"
+            result = subprocess.run(
+                ["dig", "+short", "test.openresolver.com", "TXT", f"@{domain}"],
+                capture_output=True,
+                text=True
+            )
+            return "Open Resolver" if "ANSWER" in result.stdout else "Not an Open Resolver"
+        except subprocess.CalledProcessError:
+            return "Check Failed"
 
     def check_dnssec(self, domain, nameservers):
         if nameservers:
