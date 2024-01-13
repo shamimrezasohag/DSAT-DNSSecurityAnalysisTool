@@ -11,6 +11,15 @@ The DNS Security Analysis Tool is a Python-based utility designed to conduct an 
 - **Anomaly Detection**: Basic analysis to identify potential anomalies and unusual entries in DNS records.
 - **Response Code Logging**: Captures and logs DNS response codes for each query for further analysis.
 
+### Key Notes:
+- **`check_open_resolver` Function**: This function uses the `dig` command to determine if the given domain is an open resolver. Ensure the environment where this script is run has the `dig` command available.
+- **`check_dnssec` Function**: Performs DNSSEC validation for the domain using the specified nameservers.
+- **`analyze_records` Function**: Placeholder for analyzing DNS records for anomalies. Specific logic can be implemented based on the requirements.
+- **Reporting and Processing**: The script generates a report in the chosen format and processes each domain in the input file, showing progress with a `tqdm` progress bar.
+
+This script should now provide comprehensive DNS security analysis, including open resolver checking and DNSSEC validation, among other features. Test this script in your environment to ensure it performs as expected. Please let me know if you encounter any issues or need further modifications!
+
+
 ## Prerequisites
 - Python 3.x
 - `dnspython` `pnadas` `tqdm` library
@@ -59,15 +68,7 @@ Your report should include details of the vulnerability, how it can be exploited
 - **Progress Bar**: Real-time visual feedback on script execution with a progress bar.
 
 ## License
-This project is licensed under the Apache License 2.0. Please look at the [LICENSE](LICENSE) file for more details.
-
-### Key Notes:
-- **`check_open_resolver` Function**: This function uses the `dig` command to determine if the given domain is an open resolver. Ensure the environment where this script is run has the `dig` command available.
-- **`check_dnssec` Function**: Performs DNSSEC validation for the domain using the specified nameservers.
-- **`analyze_records` Function**: Placeholder for analyzing DNS records for anomalies. Specific logic can be implemented based on the requirements.
-- **Reporting and Processing**: The script generates a report in the chosen format and processes each domain in the input file, showing progress with a `tqdm` progress bar.
-
-This script should now provide comprehensive DNS security analysis, including open resolver checking and DNSSEC validation, among other features. Test this script in your environment to ensure it performs as expected. Please let me know if you encounter any issues or need further modifications!
+This project is licensed under the Apache License 2.0. For more details, please look at the [LICENSE](LICENSE) file.
 
 ## Contact
 Please contact [Shamim](mailto:sohag.shamim@gmail.com) for any questions or feedback.
