@@ -32,9 +32,7 @@ This script should now provide comprehensive DNS security analysis, including op
 2. Navigate to the cloned directory:
 ```cd dns-security-analysis-tool```
 3. Install the required Python package:
-```pip install dnspython```
-```pip install pandas```
-`pip install tqdm`
+```pip install dnspython pandas tqdm```
 
 ## Usage
 Run the script from the command line by specifying the input file containing domain names and other optional parameters:
