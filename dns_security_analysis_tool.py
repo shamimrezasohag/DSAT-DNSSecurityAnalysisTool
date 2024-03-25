@@ -11,6 +11,7 @@ import subprocess
 import requests
 import re
 from tqdm import tqdm
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # # Setup logging for recording the process and errors
 logging.basicConfig(filename='dns_security_audit.log', level=logging.INFO,
@@ -142,15 +143,24 @@ def process_domains(domains, dns_server, output_format, output_filename):
     # Process a list of domains for DNS security analysis
     tool = DNSQueryTool(dns_server)
     all_results = []
+    max_threads = 10  # You can adjust the number of threads
 
-    with tqdm(total=len(domains), desc="Analyzing Domains") as pbar:
-        for domain in domains:
-            if not domain.strip():  # Skip empty rows
-                logging.warning(f"Skipped empty domain row")
-                continue
-            dns_results = tool.query_all_records(domain)
-            all_results.append(dns_results)
-            pbar.update(1)
+     # Filter out empty domains and prepare for progress tracking
+    filtered_domains = [domain for domain in domains if domain.strip()]
+    skipped_domains_count = len(domains) - len(filtered_domains)
+
+    with tqdm(total=len(filtered_domains), desc="Analyzing Domains") as pbar:
+        with ThreadPoolExecutor(max_workers=max_threads) as executor:
+            # Create a future for each domain in the filtered list
+            futures = {executor.submit(tool.query_all_records, domain): domain for domain in filtered_domains}
+
+            for future in as_completed(futures):
+                dns_results = future.result()
+                all_results.append(dns_results)
+                pbar.update(1)
+
+    if skipped_domains_count > 0:
+        logging.warning(f"Skipped {skipped_domains_count} empty domain rows")
 
     generate_report(all_results, output_format, output_filename)
 
