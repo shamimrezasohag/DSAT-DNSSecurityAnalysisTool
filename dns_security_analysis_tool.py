@@ -9,6 +9,7 @@ import logging
 import pandas as pd
 import subprocess
 import requests
+import re
 from tqdm import tqdm
 
 # # Setup logging for recording the process and errors
@@ -26,18 +27,34 @@ class DNSQueryTool:
         record_types = ['A', 'AAAA', 'MX', 'TXT', 'NS', 'CNAME', 'SOA', 'SPF', 'DKIM', 'DNSKEY', 'DS']
         results = {'domain': domain}
         for record_type in record_types:
+            record, response_code = self.query_record(domain, record_type)
+            if response_code == "NXDOMAIN":
+                results['Error'] = 'Domain does not exist'
+                break  # Skip remaining checks as domain doesn't exist
+            if record:
+                results[record_type] = record
+                results[f'{record_type}_response_code'] = response_code
+
+        for record_type in record_types:
             results[record_type], results[f'{record_type}_response_code'] = self.query_record(domain, record_type)
         results['PTR'], _ = self.check_reverse_dns(results.get('A', '') + results.get('AAAA', ''))
         results['Open Resolver'] = self.check_open_resolver(domain)
         results['DNSSEC'] = self.check_dnssec(domain, results.get('NS', ''))
         results['Anomalies'] = self.analyze_records(results)
         return results
+        for record_type in record_types:
+            record, response_code = self.query_record(domain, record_type)
+            if record:  # Only add non-empty records
+                results[record_type] = record
+                results[f'{record_type}_response_code'] = response_code
 
     def query_record(self, domain, record_type):
         # Perform a DNS query for a specific record type
         try:
             answers = self.resolver.resolve(domain, record_type)
             return "; ".join([answer.to_text() for answer in answers]), "NOERROR"
+        except dns.resolver.NXDOMAIN:
+            return "Domain does not exist", "NXDOMAIN"
         except Exception as e:
             return "", str(e)
 
@@ -114,12 +131,23 @@ def generate_report(all_data, output_format, output_filename):
         df.to_json(output_filename, orient='records', indent=4)
 
 def process_domains(domains, dns_server, output_format, output_filename):
+
+    def is_valid_domain(domain):
+        pattern = r'^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\.)+[A-Za-z]{2,6}$'
+        return re.match(pattern, domain) is not None
+
+    # ... inside your process_domains function ...
+    valid_domains = [domain for domain in domains if is_valid_domain(domain)]
+
     # Process a list of domains for DNS security analysis
     tool = DNSQueryTool(dns_server)
     all_results = []
 
     with tqdm(total=len(domains), desc="Analyzing Domains") as pbar:
         for domain in domains:
+            if not domain.strip():  # Skip empty rows
+                logging.warning(f"Skipped empty domain row")
+                continue
             dns_results = tool.query_all_records(domain)
             all_results.append(dns_results)
             pbar.update(1)
