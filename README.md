@@ -1,7 +1,7 @@
 # DSAT-DNSSecurityAnalysisTool
 
 ## Description
-The DNS Security Analysis Tool is a Python-based utility designed to conduct an in-depth security analysis of DNS configurations for multiple domains. It queries a wide range of DNS record types and performs specialized checks, including DNSSEC verification, open resolver detection, and reverse DNS mismatch analysis. This tool is particularly useful for network administrators, cybersecurity professionals, and anyone interested in DNS security.
+The DNS Security Analysis Tool is a Python-based utility designed to conduct an in-depth security analysis of DNS configurations for multiple domains. It queries various DNS record types and performs specialized checks, including DNSSEC verification, open resolver detection, and reverse DNS mismatch analysis. This tool is handy for network administrators, cybersecurity professionals, and anyone interested in DNS security.
 
 ## Key Features
 - **Comprehensive DNS Record Queries**: Retrieves various DNS record types such as A, AAAA, MX, TXT, NS, CNAME, SOA, SPF, DKIM, DNSKEY, DS.
@@ -10,6 +10,8 @@ The DNS Security Analysis Tool is a Python-based utility designed to conduct an 
 - **Reverse DNS Mismatch Analysis**: Examines mismatches between forward and reverse DNS records.
 - **Anomaly Detection**: Basic analysis to identify potential anomalies and unusual entries in DNS records.
 - **Response Code Logging**: Captures and logs DNS response codes for each query for further analysis.
+- **Domain Name Validation**: whether the domain exists or not. If not, no further check will be done.
+- **Empty Row filtering**: If the file contains an empty row, it will check and skip that part.
 
 ### Key Notes:
 - **`check_open_resolver` Function**: This function uses the `dig` command to determine if the given domain is an open resolver. Ensure the environment where this script is run has the `dig` command available.
@@ -66,6 +68,8 @@ Your report should include details of the vulnerability, how it can be exploited
 
 ## Features added
 - **Progress Bar**: Real-time visual feedback on script execution with a progress bar.
+- **Input Validation**
+- **Empty Row filtering**
 
 ## License
 This project is licensed under the Apache License 2.0. For more details, please look at the [LICENSE](LICENSE) file.
