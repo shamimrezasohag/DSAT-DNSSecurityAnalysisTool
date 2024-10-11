@@ -36,10 +36,10 @@ This script should now provide comprehensive DNS security analysis, including op
 
 ## Usage
 Run the script from the command line by specifying the input file containing domain names and other optional parameters:
-```python3 dns_security_analysis_tool.py --domains-file domains.txt --format csv --output dns_security_report```
+```python3 dns_security_analysis_tool.py domains.txt --format csv --output dns_security_report```
 
 ### Command-Line Arguments
-- `--domains-file`: Path to the file containing the list of domains for analysis.
+- `domains-file`: Path to the file containing the list of domains for analysis.
 - `--dns-server`: (Optional) DNS server to use for queries (default: 8.8.8.8).
 - `--format`: (Optional) output report format (`json`, `csv`, `html`).
 - `--output`: (Optional) Name of the output file (without extension).
