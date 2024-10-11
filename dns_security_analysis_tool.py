@@ -11,6 +11,7 @@ import subprocess
 import re
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import json
 
 # # Setup logging for recording the process and errors
 logging.basicConfig(filename='dns_security_audit.log', level=logging.INFO,
@@ -26,15 +27,20 @@ class DNSQueryTool:
         # Query multiple DNS record types for a given domain
         record_types = ['A', 'AAAA', 'MX', 'TXT', 'NS', 'CNAME', 'SOA', 'SPF', 'DKIM', 'DNSKEY', 'DS']
         results = {'domain': domain}
-        
-        for record_type in record_types:
+        for record_type in record_types[:2]:
+            results[record_type]= self.query_record(domain, record_type)
+        print(results)
+        if results['A'] == results['AAAA'] == 'DNE':
+            logging.error(f"Domain {domain} does not exist")
+            return "DNE"
+        for record_type in record_types[2:]:
             results[record_type]= self.query_record(domain, record_type)
         results['PTR'] = self.check_reverse_dns(results.get('A', '') + results.get('AAAA', ''))
         results['Open Resolver'] = self.check_open_resolver(domain)
         results['DNSSEC'] = self.check_dnssec(domain, results.get('NS', ''))
         results['Anomalies'] = self.analyze_records(results)
         # Empty and unnecessary data filtering
-        results = {k: v for k, v in results.items() if v}
+        results = {k: v for k, v in results.items() if v and v != ''}
         return results
 
     def query_record(self, domain, record_type):
@@ -42,9 +48,14 @@ class DNSQueryTool:
         try:
             answers = self.resolver.resolve(domain, record_type)
             return "; ".join([answer.to_text() for answer in answers])
-        # removed NXDOMAIN as it doesn't require further processing
+        except dns.resolver.NXDOMAIN:
+            if record_type == 'A' or record_type == 'AAAA':
+                try:
+                    self.resolver.resolve(domain, 'CNAME')
+                    return f"Misconfigured"
+                except:
+                    return f"DNE" # Does Not Exist
         except Exception as e:
-            # instead of return error as result that would be logged as error
             logging.error(f"Error querying {record_type} record for {domain}: {e}")
             return ""
 
@@ -105,7 +116,7 @@ class DNSQueryTool:
         # Insert anomaly detection logic here
         # Example: Check for unusual MX records
         mx_records = records.get('MX', "")
-        if 'suspicious' in mx_records:
+        if mx_records is not None and 'suspicious' in mx_records.lower():
             anomalies['MX'] = "Suspicious MX record found"
         # Additional anomaly checks can be added here
         return "; ".join([f"{k}: {v}" for k, v in anomalies.items()])
@@ -118,7 +129,8 @@ def generate_report(all_data, output_format, output_filename):
     elif output_format == 'html':
         df.to_html(output_filename, index=False)
     else:
-        df.to_json(output_filename, orient='records', indent=4)
+        with open(output_filename, 'w') as file:
+            file.write(json.dumps(all_data, indent=4))
 
 def process_domains(domains, dns_server, output_format, output_filename):
 
@@ -142,7 +154,8 @@ def process_domains(domains, dns_server, output_format, output_filename):
 
             for future in as_completed(futures):
                 dns_results = future.result()
-                all_results.append(dns_results)
+                if dns_results != "DNE":
+                    all_results.append(dns_results)
                 pbar.update(1)
 
     if skipped_domains_count > 0:
@@ -152,7 +165,7 @@ def process_domains(domains, dns_server, output_format, output_filename):
 
 def main():
     parser = argparse.ArgumentParser(description='Comprehensive DNS Security Analysis Tool')
-    parser.add_argument('domains-file', help='Input file for bulk domain security analysis')
+    parser.add_argument('--domains-file', required=True, help='Input file for bulk domain security analysis')
     parser.add_argument('--dns-server', default='8.8.8.8', help='DNS server to use for queries')
     parser.add_argument('--format', default='json', choices=['json', 'csv', 'html'], help='Format of the security report')
     parser.add_argument('--output', '-o', default='dns_security_report', help='Output file name for the DNS security report')
