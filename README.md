@@ -30,7 +30,7 @@ This script should now provide comprehensive DNS security analysis, including op
 1. Clone the repository:
 ```git clone https://github.com/shamimrezasohag/DSAT-DNSSecurityAnalysisTool.git```
 2. Navigate to the cloned directory:
-```cd dns-security-analysis-tool```
+```cd DSAT-DNSSecurityAnalysisTool```
 3. Install the required Python package:
 ```pip install dnspython pandas tqdm```
 
