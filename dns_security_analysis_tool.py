@@ -152,7 +152,7 @@ def process_domains(domains, dns_server, output_format, output_filename):
 
 def main():
     parser = argparse.ArgumentParser(description='Comprehensive DNS Security Analysis Tool')
-    parser.add_argument('domains-file', help='Input file for bulk domain security analysis')
+    parser.add_argument('--domains-file', required=True, help='Input file for bulk domain security analysis')
     parser.add_argument('--dns-server', default='8.8.8.8', help='DNS server to use for queries')
     parser.add_argument('--format', default='json', choices=['json', 'csv', 'html'], help='Format of the security report')
     parser.add_argument('--output', '-o', default='dns_security_report', help='Output file name for the DNS security report')
