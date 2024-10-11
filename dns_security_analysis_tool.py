@@ -31,8 +31,7 @@ class DNSQueryTool:
             results[record_type]= self.query_record(domain, record_type)
         print(results)
         if results['A'] == results['AAAA'] == 'DNE':
-            logging.error(f"Domain {domain} does not exist")
-            return "DNE"
+            return {'domain': domain, 'Error': 'Domain does not exist'}
         for record_type in record_types[2:]:
             results[record_type]= self.query_record(domain, record_type)
         results['PTR'] = self.check_reverse_dns(results.get('A', '') + results.get('AAAA', ''))
@@ -154,8 +153,7 @@ def process_domains(domains, dns_server, output_format, output_filename):
 
             for future in as_completed(futures):
                 dns_results = future.result()
-                if dns_results != "DNE":
-                    all_results.append(dns_results)
+                all_results.append(dns_results)
                 pbar.update(1)
 
     if skipped_domains_count > 0:
