@@ -231,6 +231,7 @@ def enhance_report(df):
             'MX Record': row.get('MX', 'Not Available'),
             'PTR Record': row.get('PTR', 'Not Available'),
             'DNSSEC Status': row.get('DNSSEC', 'Not Available'),
+            'Open Resolver': row.get('Open Resolver', 'Not an Open Resolver')  # Include Open Resolver output here
         }
 
         # Add global DNS results and latencies for each DNS provider
