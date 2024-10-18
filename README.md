@@ -12,11 +12,13 @@ The DNS Security Analysis Tool is a Python-based utility designed to conduct an 
 - **Response Code Logging**: Captures and logs DNS response codes for each query for further analysis.
 - **Domain Name Validation**: whether the domain exists or not. If not, no further check will be done.
 - **Empty Row filtering**: If the file contains an empty row, it will check and skip that part.
+- **Global CDN and Anycast Analysis**: Latency comparison across multiple DNS providers (Google DNS, Cloudflare, Quad9, OpenDNS) from different regions for each domain
 
 ### Key Notes:
 - **`check_open_resolver` Function**: This function uses the `dig` command to determine if the given domain is an open resolver. Ensure the environment where this script is run has the `dig` command available.
 - **`check_dnssec` Function**: Performs DNSSEC validation for the domain using the specified nameservers.
 - **`analyze_records` Function**: Placeholder for analyzing DNS records for anomalies. Specific logic can be implemented based on the requirements.
+- **`Global Analysis`**: The tool performs global DNS analysis by querying DNS from multiple geographic locations (e.g., Google DNS, Cloudflare, Quad9, OpenDNS), providing insights into CDN and Anycast performance.
 - **Reporting and Processing**: The script generates a report in the chosen format and processes each domain in the input file, showing progress with a `tqdm` progress bar.
 
 This script should now provide comprehensive DNS security analysis, including open resolver checking and DNSSEC validation, among other features. Test this script in your environment to ensure it performs as expected. Please let me know if you encounter any issues or need further modifications!
@@ -41,17 +43,22 @@ Run the script from the command line by specifying the input file containing dom
 ### Command-Line Arguments
 - `domains-file`: Path to the file containing the list of domains for analysis.
 - `--dns-server`: (Optional) DNS server to use for queries (default: 8.8.8.8).
+- `--global-analysis`: (Optional) Enable global CDN and Anycast DNS analysis, comparing multiple DNS providers.
 - `--format`: (Optional) output report format (`json`, `csv`, `html`).
 - `--output`: (Optional) Name of the output file (without extension).
+
+## Example:
+To run the tool with global CDN analysis and produce an HTML report:
+```python3 dns_security_analysis_tool.py --domains-file domains.txt --global-analysis --format html --output dns_security_report```
 
 ## Bug Reporting and Contributions
 
 ### Reporting Bugs
-If you encounter any bugs or issues with the DNS Security Analysis Tool, please report them to us for investigation. You can submit bug reports via our GitHub Issues page:
+If you happen to encounter any bugs or issues with the DNS Security Analysis Tool, please report them to us for investigation. You can submit bug reports via our GitHub Issues page:
 
 [Submit a Bug Report](https://github.com/shamimrezasohag/DSAT-DNSSecurityAnalysisTool/blob/main/.github/ISSUE_TEMPLATE/bug_report.md)
 
-When reporting a bug, please provide as much detail as possible, such as the steps to reproduce the issue, the expected outcome, and any relevant logs or screenshots.
+When you report a bug, please provide as much detail as possible, such as the steps to reproduce the issue, the expected outcome, and any relevant logs or screenshots.
 
 ### Contributing
 I want you to know that contributions to this project are welcome. Please feel free to fork the repository, make changes, and submit a pull request.
@@ -60,9 +67,9 @@ For more details on how to contribute, please read our [CONTRIBUTING.md](CONTRIB
 
 ## Reporting Security Vulnerabilities
 
-We take the security of our project seriously. If you find any security vulnerabilities in our tool, please report them responsibly. To report a security vulnerability, please follow the steps outlined in our [Security Policy](https://github.com/shamimrezasohag/dns-security-analysis-tool/SECURITY.md).
+We take the security of our project seriously. If you find any security vulnerabilities in our tool, please make sure to report them responsibly. To report a security vulnerability, please follow the steps outlined in our [Security Policy](https://github.com/shamimrezasohag/dns-security-analysis-tool/SECURITY.md).
 
-Your report should include details of the vulnerability, how it can be exploited, and any potential impact. Please do not disclose the vulnerability publicly until we have had a chance to resolve it.
+Your report should include details of the vulnerability, how it can be exploited, and any potential impact. Please only disclose the vulnerability publicly once we have had a chance to resolve it.
 
 ## Features added
 - **Progress Bar**: Real-time visual feedback on script execution with a progress bar.
