@@ -75,6 +75,7 @@ Your report should include details of the vulnerability, how it can be exploited
 - **Progress Bar**: Real-time visual feedback on script execution with a progress bar.
 - **Input Validation**
 - **Empty Row filtering**
+- **Check via Global CDN server**
 
 ## License
 This project is licensed under the Apache License 2.0. For more details, please look at the [LICENSE](LICENSE) file.
